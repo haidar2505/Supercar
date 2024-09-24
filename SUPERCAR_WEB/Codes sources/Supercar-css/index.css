@@ -1,0 +1,55 @@
+video{
+    border-radius: 20px;
+}
+#modele{
+    font-weight: 200;
+    margin-right: 20px;
+}
+#explorer{
+    color: black;
+    background: rgba(255, 255, 255, 0.7);
+    border: solid 1px white;
+    width: 125px;
+    height: 50px;
+    margin: 0 20px 25px 0;
+}
+#explorer:hover{
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+#description{
+    font-size: 18px;
+}
+#video_logo{
+    width: 98px;
+    margin: 20px 0 0 25px;
+}
+#font{
+    font-weight: 200;
+}
+#logos{
+    width: 60px;
+    margin: 10px 0 0 15px;
+}
+#offres{
+    border-radius: 20px;
+}
+#events_text{
+    margin: 0 0 0 15px;
+}
+#news_button{
+    background-color: white;
+    transition: all 0.3s ease-in-out;
+}
+#news_button:hover{
+    background-color: black;
+    color: white;
+}
+@media(max-width:1600px){
+    #actualite{
+        flex-direction: column;
+    }
+}
+.image_shadow{
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 3px 8px;
+}

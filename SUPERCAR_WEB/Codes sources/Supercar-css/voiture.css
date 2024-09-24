@@ -1,0 +1,18 @@
+#details h2, p{
+    font-family: "Anton", sans-serif
+}
+#description{
+    font-family: "Poppins", sans-serif;
+}
+#essayer{
+    border: 1px solid white;
+    margin: 0 50px 0 0;
+    width: 200px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.7);
+    transition: all 0.3s ease-in-out;
+}
+#essayer:hover{
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+}
