@@ -46,9 +46,9 @@
                 <h2 class="mb-5"><u>AD</u>MIN</h2>
                 <div class="d-flex w-100">
                     <div class="d-felx flex-column w-100 ms-3">
-                        <label for="recipient-name" class="col-form-label">Nom<span>*</span></label>
-                        <input type="text" class="form-control" name="Nom_Admin" id="input" value="<?php echo $nom_admin ?>">
-                        <p style="color: red; font-size: 15px; margin: 1% 0 -0.1% 0;" class="ms-1"><?php echo $nom_error ?></p>
+                        <label for="recipient-name" class="col-form-label">Username<span>*</span></label>
+                        <input type="text" class="form-control" name="username_admin" id="input" value="<?php echo $username_admin ?>">
+                        <p style="color: red; font-size: 15px; margin: 1% 0 -0.1% 0;" class="ms-1"><?php echo $username_admin_error ?></p>
                     </div>
                     <div class="d-felx flex-column w-100">
                         <label for="recipient-name" class="col-form-label">Mot de passe<span>*</span></label>

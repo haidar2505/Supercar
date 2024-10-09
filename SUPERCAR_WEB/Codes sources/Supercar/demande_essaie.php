@@ -12,6 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="../Supercar-css/navbar.css">
     <link rel="stylesheet" href="../Supercar-css/demande_essaie.css">
     <title>Supercar</title>
@@ -106,12 +107,24 @@
     </nav>
     <!--  -->
     <!-- Formulaire -->
-    <form action="" method="POST">
-        <div class="centered d-flex align-items-center justify-content-center">
-            <div class=" d-flex flex-column justify-content-center w-25 border mt-5 px-2 rounded me-5">
-                <h4 class="text-center mt-3">Demande d'essai</h4>
+    <form action="" method="POST" class="mt-5 mb-5">
+        <div class="text-center">
+            <h2 class="text-center mb-5">Faire une demande d'essai</h2>
+            <p style="margin-top: 4%;">Il n'y a pas de meilleure façon de découvrir la performance d’une voiture que de prendre le volant.</p>
+        </div>
+        <div class="d-flex align-items-center justify-content-center w-100">
+            <div class="row d-flex justify-content-center w-75 border py-5 px-5" id="consignes">
+                <div class="col-4 me-5 d-flex">
+                    <i class='bx bx-check me-3' id="check"></i><p>Pour faire une demande, veuillez compléter le formulaire et nous vous contacterons par votre E-mail dans les prochains jours pour confirmer votre demande.</p>
+                </div>
+                <div class="col-4 ms-5 d-flex">
+                    <i class='bx bx-check me-3' id="check"></i><p>Veuillez vous assurer que les informations que vous fournissez sont exactes et complètes</p>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex align-items-center justify-content-center w-100" style="margin-top: 4%;">
+            <div class="w-50">
                 <?php
-                    $heure_demande = $modele_demande = $jour_demande = NULL;
                     include("../Database/connexion.php");
                     if ($is_logged_in){ 
                         $infos_query = "SELECT Id_inscription, Nom, Prenom, Email FROM inscription_client WHERE Username = '$_SESSION[username]';";
@@ -121,97 +134,84 @@
                         $nom = $get_infos['Nom'];
                         $prenom = $get_infos['Prenom'];
                         $email = $get_infos['Email'];
-                        $demande_query = "SELECT * FROM demande_essaie WHERE Id_inscription = $id;";
-                        $demande_result = mysqli_query($bdd, $demande_query);
                 ?>
-                    <label for="recipient-name" class="col-form-label">Nom complète</label>
-                    <input type="text" disabled class="form-control" id="input" value="<?php echo $nom.' '.$prenom ?>">
-                    <input type="hidden" value="<?php echo $id ?>">
-                    <label for="recipient-name" class="col-form-label">Email</label>
-                    <input type="text" disabled class="red_outline form-control" id="input" value="<?php echo $email ?>">
-                <?php                
+                <div class="w-100 d-flex">
+                    <div class="w-50 me-3">
+                        <label for="recipient-name" class="col-form-label"><h5 class="fw-normal mb-0">Nom</h5></label>
+                        <input type="text" disabled class="form-control" id="input" value="<?php echo $nom ?>">
+                        <input type="hidden" value="<?php echo $id ?>">
+                    </div>
+                    <div class="w-50 me-3">
+                        <label for="recipient-name" class="col-form-label"><h5 class="fw-normal mb-0">Prénom</h5></label>
+                        <input type="text" disabled class="form-control" id="input" value="<?php echo $prenom ?>">
+                        <input type="hidden" value="<?php echo $id ?>">
+                    </div>
+                </div>
+                <label for="recipient-name" class="col-form-label"><h5 class="fw-normal mt-2 mb-0">Email</h5></label>
+                <input type="text" disabled class="red_outline form-control" id="input" value="<?php echo $email ?>">
+                <?php
+                        include("../Database/connexion.php");
+                        if(isset($_POST["essayer"])){
+                            if($_SESSION['selected_model_id']){
+                                $selected_modele = "SELECT a.Modele, b.Marque, b.Logo FROM voiture a JOIN marque b ON a.Id_marque = b.Id_marque WHERE $_SESSION[selected_model_id] = a.Id_voiture;";
+                                $curseur = mysqli_query($bdd, $selected_modele);
+                                $row = mysqli_fetch_assoc($curseur);
+                                if($row){
+                                    $modele = $row["Modele"];
+                                    $marque = $row["Marque"];
+                                }
+                            }
+                        }
                     }
                 ?>
-                <label for="recipient-name" class="col-form-label">Numéro téléphone<span>*</span></label>
-                <input type="tel" class="red_outline form-control" name="NumTel" value="<?php echo $numtel ?>">
-                <p style="color: red; font-size: 15px; margin: 1% 0 -0.1% 0;" class="ms-1"><?php echo $numtel_error ?></p>
-                <label for="recipient-name" class="col-form-label">Choisir une modèle<span>*</span></label>
-                <select class="red_outline form-select" aria-label="Default select example" name="Modele">
+                <label class="col-form-label"><h4 class="mb-0 mt-5">Choisir une modèle<span>*</span></h4></label>
+                <select class="form-select mt-3" aria-label="Default select example" name="Modele">
                     <option selected value="<?php echo $id_modele ?>"><?php echo $marque.' '.$modele ?></option>
                     <?php
                         include("../Database/connexion.php");
                         $option_modele = "SELECT a.Id_voiture, a.Modele, b.Marque, b.Logo FROM voiture a JOIN marque b WHERE a.Id_marque = b.Id_marque;";
                         $curseur = mysqli_query($bdd, $option_modele);
-                        if ($curseur){
-                            while($row = mysqli_fetch_assoc($curseur)){
-                                $id_voiture = $row["Id_voiture"];
-                                $modele = $row["Modele"];
-                                $marque = $row["Marque"];
-                                $selected = '';
-                            if (isset($_SESSION['selected_model_id']) && $_SESSION['selected_model_id'] == $id_voiture) {
-                                $selected = 'selected';
-                            }
-                            echo "<option value=\"$id_voiture\" $selected>$marque $modele</option>";
+                        while($row = mysqli_fetch_assoc($curseur)){
+                            $id_voiture = $row["Id_voiture"];
+                            $modele = $row["Modele"];
+                            $marque = $row["Marque"];
                     ?>
                     <option value="<?php echo $id_voiture; ?>" name="id_voiture"><?php echo $marque.' '.$modele ?></option>
-                    <img src="../Images/Logos/<?php echo $logo ?>">
                     <?php
                         }
                         mysqli_free_result($curseur);
-                        } else {
-                            echo "Error: " . mysqli_error($bdd);
-                        }
                         mysqli_close($bdd);
                     ?>
                 </select>
                 <p style="color: red; font-size: 15px; margin: 1% 0 -0.1% 0;" class="ms-1"><?php echo $modele_error ?></p>
-                <div class="d-flex w-100">
-                    <div class="d-felx flex-column w-100">
-                        <label for="recipient-name" class="col-form-label">Date<span>*</span></label>
-                        <input type="date" class="red_outline form-control" id="input" name="Date" value="<?php echo $date ?>">
-                        <p style="color: red; font-size: 15px; margin: 1% 0 -0.1% 0;" class="ms-1"><?php echo $date_error ?></p>
+                <div class="w-100 d-flex mt-4">
+                    <div class="w-50 me-3">
+                        <label for="recipient-name" class="col-form-label"><h5 class="fw-normal mb-0">Numéro téléphone<span>*</span></h5></label>
+                        <input type="tel" class="form-control" name="NumTel" value="<?php echo $numtel ?>">
+                        <p style="color: red; font-size: 15px; margin: 1% 0 -0.1% 0;" class="ms-1"><?php echo $numtel_error ?></p>
                     </div>
-                    <div class="d-felx flex-column w-100">
-                        <label for="recipient-name" class="col-form-label">Heure<span>*</span></label>
-                        <input type="time" class="red_outline form-control" id="input" name="Heure" value="<?php echo $heure ?>">
-                        <p style="color: red; font-size: 15px; margin: 1% 0 -0.1% 0;" class="ms-1"><?php echo $heure_error ?></p>
+                    <div class="w-25 me-3">
+                        <label for="recipient-name" class="col-form-label"><h5 class="fw-normal mb-0">Date<span>*</span></h5></label>
+                        <input type="date" class="form-control" id="input" name="Date" value="<?php echo $date ?>">
+                        <p style="color: red; font-size: 15px; margin: 1% 0 -0.1% 0;"><?php echo $date_error ?></p>
+                    </div>
+                    <div class="w-25">
+                        <label for="recipient-name" class="col-form-label"><h5 class="fw-normal mb-0">Heure<span>*</span></h5></label>
+                        <input type="time" class="form-control" id="input" name="Heure" value="<?php echo $heure ?>">
+                        <p style="color: red; font-size: 15px; margin: 1% 0 -0.1% 0;"><?php echo $heure_error ?></p>
                     </div>
                 </div>
-                <div class="d-flex align-items-center justify-content-around w-100 mt-4 mb-3">
-                    <input class="w-25 p-2" type="submit" value="Envoyer" name="envoyer_demande" id="btn-1">
-                    <input type="submit" class="w-25 p-2" name="clear_form" value="Annuler" id="btn-1">
+                <div class="d-flex align-items-center w-100 mt-5 mb-5">
+                    <div class="d-flex flex-column">
+                        <p class="mb-0"><input type="checkbox" name="checked" value="1" <?php if($checked == 1){ ?> checked <?php } ?>><span> *</span>J'ai lu et compris la politique de confidentialité.</p>
+                        <p style="color: red; font-size: 15px;"><?php echo $checked_error ?></p>
+                    </div>
+                    <div class="w-75 d-flex justify-content-end">
+                        <input type="submit" class="w-50 py-3 me-2" value="Envoyer" name="envoyer_demande">
+                        <input type="submit" class="w-50 py-3" value="Annuler" name="clear_form" >
+                    </div>
                 </div>
             </div>
-            <?php
-            if ($is_logged_in){
-            ?>
-            <div class="d-flex flex-column justify-content-center w-25 border mt-5 rounded ms-5 px-3">
-                <h4 class="text-center mt-3">Demande d'essai faite</h4>
-                <?php
-                    include("../Database/connexion.php");
-                    if (mysqli_num_rows($demande_result) > 0) {
-                        $demande_query1 = "SELECT Id_inscription, Modele, Jour, Heure FROM demande_essaie WHERE Id_inscription = $id;";
-                        $demande_result1 = mysqli_query($bdd, $demande_query1);
-                        while ($get_demande = mysqli_fetch_assoc($demande_result1)) {
-                            $id_demande = $get_demande['Id_inscription'];
-                            $modele_demande = $get_demande['Modele'];
-                            $jour_demande = $get_demande['Jour'];
-                            $jour_demande_letters = new DateTime($jour_demande);
-                            $jour_demande_new = $jour_demande_letters->format('d F Y');
-                            $heure_demande = $get_demande['Heure'];
-                            $heure_demande_A = new DateTime($heure_demande);
-                            $heure_demande_new = $heure_demande_A->format('H:i');
-                            echo "<p class='text-justify mt-4'>Vous avez soumis une demande d'essai pour le modèle $modele_demande pour le $jour_demande_new à $heure_demande_new.</p>";
-                        }
-                    }else{
-                        echo "<p class='text-center mt-4'>Aucun demande essaie faite.</p>";
-
-                    }
-                ?>
-            </div>
-            <?php
-            }
-            ?>
         </div>
     </form>
     <!-- Modal sucess -->

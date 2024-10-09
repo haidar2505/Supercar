@@ -33,9 +33,9 @@
             $password_error = "Votre mot de passe doit contenir au moins un chiffre";
             $errors = true;
         }elseif (!preg_match($pattern, $frogotpassword)){
-            $password_error = "Votre mot de passe doit contenir au moins un caractère spéciale sauf '<', '>', '/' '\'";
+            $password_error = "Votre mot de passe doit contenir au moins un caractère spéciale";
             $errors = true;
-        }elseif (strlen($frogotpassword) < 12){
+        }elseif (strlen($frogotpassword) < 8){
             $password_error = "Votre mot de passe doit contenir 8 ou plus de caractère";
             $errors = true;
         }
@@ -44,8 +44,8 @@
             $errors = true;
         }
         if (!$errors){
-            // $hash_frogotpassword = password_hash($confirmfrogotpassword, PASSWORD_DEFAULT);
-            $insert = "UPDATE inscription_client SET Mot_de_passe = '$confirmfrogotpassword' WHERE Email = '$email';";
+            $hash_frogotpassword = sha1($confirmfrogotpassword);
+            $insert = "UPDATE inscription_client SET Mot_de_passe = '$hash_frogotpassword' WHERE Email = '$email';";
             mysqli_query($bdd, $insert);
             $showModal = true;
         }

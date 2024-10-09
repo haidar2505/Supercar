@@ -20,15 +20,15 @@
                 $motdepasse = $row["Mot_de_passe"];
             }
         }
-        
-        if ($mot_de_passe_connection == ""){
+        $hash_motdepasse = sha1($mot_de_passe_connection);
+        if ($hash_motdepasse == ""){
             $mot_de_passe_error = 'Entrez votre mot de passe';
             $errors = true;
-        }elseif ($mot_de_passe_connection != $motdepasse){
+        }elseif ($hash_motdepasse != $motdepasse){
             $mot_de_passe_error = 'Mot de passe incorrect';
             $errors = true;
         }else{
-            if($mot_de_passe_connection == $motdepasse){
+            if($hash_motdepasse == $motdepasse){
                 session_start();
                 $_SESSION["username"] = $username_connection;
                 header("Location: index.php");

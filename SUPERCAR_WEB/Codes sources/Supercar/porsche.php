@@ -124,7 +124,7 @@
     <div class="d-flex justify-content-center align-items-center mt-3 mb-3">
         <div class="w-75 position-relative">
             <img class="w-100 rounded border" src="../Images/Voiture/Porsche/<?php echo $photo ?>">
-            <form action="" method="POST">
+            <form action="demande_essaie" method="POST">
                 <div class="position-absolute d-flex justify-content-center align-items-center flex-column bottom-0 end-0 mb-5">
                     <input class="btn" type="submit" value="Essayer ce modèle" name="essayer" id="essayer">
                     <input type="hidden" value="<?php echo $id ?>" name="Id_modele">

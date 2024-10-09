@@ -72,7 +72,7 @@
         }elseif (!preg_match($pattern, $motdepasse)){
             $password_error = "Votre mot de passe doit contenir au moins un caractère spéciale";
             $errors = true;
-        }elseif (strlen($motdepasse) < 12){
+        }elseif (strlen($motdepasse) < 8){
             $password_error = "Votre mot de passe doit contenir 8 ou plus de caractère";
             $errors = true;
         }
@@ -95,7 +95,7 @@
             }
         }
         if (!$errors){
-            $hash_motdepasse = password_hash($motdepasse_confirm, PASSWORD_DEFAULT);
+            $hash_motdepasse = sha1($motdepasse_confirm);
             $insert = "INSERT INTO inscription_client (Nom, Prenom, Ville, NumTel, Email, Username, Mot_de_passe) VALUES ('$nom', '$prenom', '$ville', '$numtel', '$email', '$username', '$hash_motdepasse')";
             mysqli_query($bdd, $insert);
             $showModal = true;
